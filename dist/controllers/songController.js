@@ -178,8 +178,8 @@ const addSong = async (req, res) => {
     }
     try {
         const files = req.files;
-        let thumbnail = null;
-        let audio = null;
+        let thumbnail = undefined;
+        let audio = undefined;
         files.map((file) => {
             if (file.mimetype.split('/')[0] === 'image') {
                 thumbnail = file.originalname;
@@ -188,11 +188,10 @@ const addSong = async (req, res) => {
                 audio = file.originalname;
             }
             else {
-                thumbnail = null;
-                audio = null;
+                return;
             }
         });
-        if (!thumbnail || !audio) {
+        if (!audio) {
             return res.status(400).json({
                 success: false,
                 message: 'Request files is missing!',
