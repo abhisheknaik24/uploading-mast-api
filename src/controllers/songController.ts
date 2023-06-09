@@ -203,9 +203,9 @@ const addSong = async (req: Request, res: Response) => {
   try {
     const files: Express.Multer.File[] = req.files as Express.Multer.File[];
 
-    let thumbnail: string | null = null;
+    let thumbnail: string | undefined = undefined;
 
-    let audio: string | null = null;
+    let audio: string | undefined = undefined;
 
     files.map((file: Express.Multer.File) => {
       if (file.mimetype.split('/')[0] === 'image') {
@@ -213,12 +213,11 @@ const addSong = async (req: Request, res: Response) => {
       } else if (file.mimetype.split('/')[0] === 'audio') {
         audio = file.originalname;
       } else {
-        thumbnail = null;
-        audio = null;
+        return;
       }
     });
 
-    if (!thumbnail || !audio) {
+    if (!audio) {
       return res.status(400).json({
         success: false,
         message: 'Request files is missing!',
